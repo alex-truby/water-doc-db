@@ -80,6 +80,16 @@ Two text documents have been included in this repo in data/policy docs. One is t
 Compact, and the other is an imaginary water rights agreement. These documents will be queried and
 used as reference in the generative responses output when using the sample queries. 
 
+NOTE: These two documents should *already* be included in the data base. Before re-adding these 
+documents, you can check this by running:
+
+```bash
+python src/confirm_doc_ingest.py
+```
+
+If you would like to add additional docs into the database, that may be done with the below
+workflow.
+
 The workflow to ingest documents can be run with the following for a single file
 ```bash
 python src/ingest_docs.py -i single
@@ -90,10 +100,8 @@ or with the below to ingest all files in the policy_docs directory:
 python src/ingest_docs.py -i all
 ```
 
-Users can ingest *all* 
-documents influded in the data/policy_docs directory, or ingest a single file at a time. Currently 
-it is configured under the assumption that the document to be ingested is in PDF format and 
-contained in the data/policy_docs directory.
+Currently this workflow is configured under the assumption that the document to be ingested is in 
+PDF format and contained in the data/policy_docs directory.
 
 ## Now the Fun - Queries and Questions!
 Now the best part! Modify the queries to output generative responses based on the text documents 
