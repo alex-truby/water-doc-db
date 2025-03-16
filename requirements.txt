@@ -1,0 +1,2 @@
+weaviate-client==4.11.1
+PyPDF2==3.0.1
