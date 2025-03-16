@@ -11,7 +11,7 @@ client = weaviate.connect_to_local(
 try:
     collection = client.collections.get("PolicyDocument")
     for item in collection.iterator():
-        print(item.uuid, item.properties['title'])
+        print(item.uuid, item.properties["title"])
 
 finally:
     client.close()

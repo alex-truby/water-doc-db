@@ -2,6 +2,8 @@ import os
 import weaviate
 import PyPDF2
 import re
+import click
+
 
 def extract_text_from_pdf(pdf_path):
     text = ""
@@ -9,18 +11,18 @@ def extract_text_from_pdf(pdf_path):
     try:
         with open(pdf_path, "rb") as f:
             reader = PyPDF2.PdfReader(f)
-            if reader.metadata and '/Title' in reader.metadata:
+            if reader.metadata and "/Title" in reader.metadata:
                 # title = reader.metadata['/Title']
-                title = reader.metadata['/Title']
+                title = reader.metadata["/Title"]
                 # Clean up the title
                 title = title.strip()
                 # Remove trailing .pdf or .PDF using regex
-                title = re.sub(r'\.pdf$', '', title, flags=re.IGNORECASE)
-                title = title.replace('.PDF', '')
+                title = re.sub(r"\.pdf$", "", title, flags=re.IGNORECASE)
+                title = title.replace(".PDF", "")
                 # Replace hyphens and underscores with spaces
-                title = title.replace('-', ' ').replace('_', ' ')
+                title = title.replace("-", " ").replace("_", " ")
                 # Collapse multiple spaces into a single space
-                title = ' '.join(title.split())
+                title = " ".join(title.split())
             for page in reader.pages:
                 page_text = page.extract_text()
                 if page_text:
@@ -28,6 +30,7 @@ def extract_text_from_pdf(pdf_path):
     except Exception as e:
         print(f"Error reading {pdf_path}: {e}")
     return title, text
+
 
 def ingest_pdf(client, pdf_path, collection):  # Pass the client as an argument
     print(f"\nProcessing file: {pdf_path}")
@@ -39,9 +42,13 @@ def ingest_pdf(client, pdf_path, collection):  # Pass the client as an argument
     else:
         print(f"Extracted title: {title}")
 
-    country_input = input("Enter country/countries for this document (comma-separated): ").strip()
+    country_input = input(
+        "Enter country/countries for this document (comma-separated): "
+    ).strip()
     state_input = input("Enter state(s) for this document (comma-separated): ").strip()
-    policyType_input = input("Enter policy type(s) for this document (comma-separated): ").strip()
+    policyType_input = input(
+        "Enter policy type(s) for this document (comma-separated): "
+    ).strip()
 
     countries = [x.strip() for x in country_input.split(",") if x.strip()]
     states = [x.strip() for x in state_input.split(",") if x.strip()]
@@ -52,7 +59,7 @@ def ingest_pdf(client, pdf_path, collection):  # Pass the client as an argument
         "content": content,
         "country": countries,
         "state": states,
-        "policyType": policyTypes
+        "policyType": policyTypes,
     }
 
     try:
@@ -65,52 +72,51 @@ def ingest_pdf(client, pdf_path, collection):  # Pass the client as an argument
     except Exception as e:
         print(f"Error ingesting {file_name}: {e}")
 
-def main():
+
+@click.command()
+@click.option(
+    "--ingest_mode",
+    "-im",
+    type=str,
+    help="'single' or 'all' files in policy docs folder.",
+)
+def cli(ingest_mode):
     client = weaviate.connect_to_local(
-        headers={
-            "X-OpenAI-Api-Key": os.environ["OPENAI_APIKEY"]
-        }
+        headers={"X-OpenAI-Api-Key": os.environ["OPENAI_APIKEY"]}
     )
 
     collection = client.collections.get("PolicyDocument")
 
     pdf_directory = os.path.join(os.path.dirname(__file__), "..", "data", "policy_docs")
     if not os.path.exists(pdf_directory):
-        print(f"Directory {pdf_directory} does not exist. Please create it and add PDF files.")
+        print(
+            f"Directory {pdf_directory} does not exist. Please create it and add PDF files."
+        )
         return
-
-    for filename in os.listdir(pdf_directory):
-        if filename.lower().endswith(".pdf"):
-            pdf_path = os.path.join(pdf_directory, filename)
-            ingest_pdf(client, pdf_path, collection) # Pass the client to ingest_pdf
-
+    if ingest_mode == "single":
+        filename = input("Enter filename of document to upload: ").strip()
+        try:
+            if filename.lower().endswith(".pdf"):
+                pdf_path = os.path.join(pdf_directory, filename)
+                ingest_pdf(
+                    client, pdf_path, collection
+                )  # Pass the client to ingest_pdf
+        except:
+            print(
+                "Filepath does not exist. Please ensure the file to upload is in PDF format in data/policy_docs."
+            )
+    else:
+        for filename in os.listdir(pdf_directory):
+            if filename.lower().endswith(".pdf"):
+                pdf_path = os.path.join(pdf_directory, filename)
+                ingest_pdf(
+                    client, pdf_path, collection
+                )  # Pass the client to ingest_pdf
     client.close()
 
-def main_single_file_upload():
-    client = weaviate.connect_to_local(
-        headers={
-            "X-OpenAI-Api-Key": os.environ["OPENAI_APIKEY"]
-        }
-    )
-
-    collection = client.collections.get("PolicyDocument")
-
-    pdf_directory = os.path.join(os.path.dirname(__file__), "..", "data", "policy_docs")
-    if not os.path.exists(pdf_directory):
-        print(f"Directory {pdf_directory} does not exist. Please create it and add PDF files.")
-        return
-
-    filename = input("Enter filename of document to upload: ").strip()
-    try:
-        if filename.lower().endswith(".pdf"):
-            pdf_path = os.path.join(pdf_directory, filename)
-            ingest_pdf(client, pdf_path, collection) # Pass the client to ingest_pdf
-    except:
-        print("Filepath does not exist. Please ensure the file to upload is in PDF format in data/policy_docs.")
-    client.close()
 
 if __name__ == "__main__":
     try:
-        main_single_file_upload()
+        cli()
     except Exception as e:
         print(f"An error occurred: {e}")

@@ -4,7 +4,9 @@ import os
 
 client = weaviate.connect_to_local(
     headers={
-        "X-OpenAI-Api-Key": os.environ["OPENAI_APIKEY"]  # Your OpenAI API key must be set in the environment
+        "X-OpenAI-Api-Key": os.environ[
+            "OPENAI_APIKEY"
+        ]  # Your OpenAI API key must be set in the environment
     }
 )
 
@@ -36,7 +38,7 @@ try:
                 name="policyType",
                 data_type=wvc.config.DataType.TEXT_ARRAY,
                 # is_array=True,   # Allow multiple policy types
-            )
+            ),
         ],
         generative_config=wvc.config.Configure.Generative.openai(),
     )
@@ -47,6 +49,6 @@ try:
 finally:
     client.close()
 
-# # to delete a class 
-# client.collections.delete("PolicyDocument") 
+# # to delete a class
+# client.collections.delete("PolicyDocument")
 # client.close()
