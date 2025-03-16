@@ -16,6 +16,12 @@ try:
         grouped_task="How many acre feet of water does Littlefoot get access to on the Stegosaurus River?"
     )
     print(response.generated) 
+    response = collection.generate.near_text(
+        query="LBT",
+        limit=2,
+        grouped_task="Who is impacted by the Stegosaurus River Water Rights Agreement?"
+    )
+    print(response.generated) 
 finally:
     client.close()
 
