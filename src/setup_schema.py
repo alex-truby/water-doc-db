@@ -24,14 +24,17 @@ try:
             wvc.config.Property(
                 name="country",
                 data_type=wvc.config.DataType.TEXT,
+                is_array=True,   # Allow multiple countries
             ),
             wvc.config.Property(
                 name="state",
                 data_type=wvc.config.DataType.TEXT,
+                is_array=True,   # Allow multiple states
             ),
             wvc.config.Property(
                 name="policyType",
                 data_type=wvc.config.DataType.TEXT,
+                is_array=True,   # Allow multiple policy types
             )
         ]
     )
