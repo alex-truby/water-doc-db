@@ -1,6 +1,7 @@
 import os
 import weaviate
 import PyPDF2
+import re
 
 def extract_text_from_pdf(pdf_path):
     text = ""
@@ -9,7 +10,17 @@ def extract_text_from_pdf(pdf_path):
         with open(pdf_path, "rb") as f:
             reader = PyPDF2.PdfReader(f)
             if reader.metadata and '/Title' in reader.metadata:
+                # title = reader.metadata['/Title']
                 title = reader.metadata['/Title']
+                # Clean up the title
+                title = title.strip()
+                # Remove trailing .pdf or .PDF using regex
+                title = re.sub(r'\.pdf$', '', title, flags=re.IGNORECASE)
+                title = title.replace('.PDF', '')
+                # Replace hyphens and underscores with spaces
+                title = title.replace('-', ' ').replace('_', ' ')
+                # Collapse multiple spaces into a single space
+                title = ' '.join(title.split())
             for page in reader.pages:
                 page_text = page.extract_text()
                 if page_text:

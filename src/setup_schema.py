@@ -8,6 +8,8 @@ client = weaviate.connect_to_local(
     }
 )
 
+
+
 try:
     policy_documents = client.collections.create(
         name="PolicyDocument",
@@ -23,20 +25,21 @@ try:
             ),
             wvc.config.Property(
                 name="country",
-                data_type=wvc.config.DataType.TEXT,
-                is_array=True,   # Allow multiple countries
+                data_type=wvc.config.DataType.TEXT_ARRAY,
+                # input_type=list,   # Allow multiple countries
             ),
             wvc.config.Property(
                 name="state",
-                data_type=wvc.config.DataType.TEXT,
-                is_array=True,   # Allow multiple states
+                data_type=wvc.config.DataType.TEXT_ARRAY,
+                # is_array=True,   # Allow multiple states
             ),
             wvc.config.Property(
                 name="policyType",
-                data_type=wvc.config.DataType.TEXT,
-                is_array=True,   # Allow multiple policy types
+                data_type=wvc.config.DataType.TEXT_ARRAY,
+                # is_array=True,   # Allow multiple policy types
             )
-        ]
+        ],
+        generative_config=wvc.config.Configure.Generative.openai(),
     )
 
     # Print out the full configuration for verification
@@ -44,3 +47,7 @@ try:
 
 finally:
     client.close()
+
+# # to delete a class 
+# client.collections.delete("PolicyDocument") 
+# client.close()
