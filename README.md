@@ -80,9 +80,14 @@ Two text documents have been included in this repo in data/policy docs. One is t
 Compact, and the other is an imaginary water rights agreement. These documents will be queried and
 used as reference in the generative responses output when using the sample queries. 
 
-The workflow to ingest documents is included in 
+The workflow to ingest documents can be run with the following for a single file
 ```bash
-python src/ingest_docs.py
+python src/ingest_docs.py -i single
+```
+
+or with the below to ingest all files in the policy_docs directory:
+```bash
+python src/ingest_docs.py -i all
 ```
 
 Users can ingest *all* 

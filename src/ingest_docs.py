@@ -76,7 +76,7 @@ def ingest_pdf(client, pdf_path, collection):  # Pass the client as an argument
 @click.command()
 @click.option(
     "--ingest_mode",
-    "-im",
+    "-i",
     type=str,
     help="'single' or 'all' files in policy docs folder.",
 )
