@@ -9,7 +9,6 @@ client = weaviate.connect_to_local(
 )
 
 
-
 try:
     policy_documents = client.collections.create(
         name="PolicyDocument",
