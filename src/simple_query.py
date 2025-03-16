@@ -11,10 +11,13 @@ client = weaviate.connect_to_local(
 try:
     collection = client.collections.get("PolicyDocument")
     response = collection.generate.near_text(
-        query="colorado",
+        query="LBT",
         limit=2,
-        grouped_task="Write a two sentence summary on the management of the Colorado River. Include which states are impacted.",
+        grouped_task="How many acre feet of water does Littlefoot get access to on the Stegosaurus River?"
     )
-    print(response.generated)
+    print(response.generated) 
 finally:
     client.close()
+
+
+
