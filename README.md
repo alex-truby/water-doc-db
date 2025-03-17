@@ -5,19 +5,19 @@ Vector Database & Document Search for Water Related Text Documents
 The purpose of this repo is to build the foundation for creating a searchable text database for 
 water related documents. A retrieval augmented generation (RAG), or generative search, is 
 implemented to search for information contained in text based documents, in this case, related to 
-water. Weaviate provides a great illutsration of this [workflow and how to implement it](https://weaviate.io/developers/weaviate/quickstart/local) 
+water. Weaviate provides a great illustration of this [workflow and how to implement it](https://weaviate.io/developers/weaviate/quickstart/local) 
 in their documentation.
 
 ![RAG overview](./static/images/weaviate_rag_overview.png)
 
 The documents included in this project may contain information on water policy, water 
-regulation, water rights, etc. Often times these documents are in PDF format, which can make 
+regulation, water rights, etc. Often these documents are in PDF format, which can make 
 scanning for information tedious. The goal of this repo is to build a tool that allows users to
 configure a locally hosted vector database with Weaviate and Docker.
 
 This repo uses Docker, Weaviate, and the OpenAI API to generate responses to questions and prompts
 fed into a user defined query. If the user does not have an OpenAI API key, you can visit
-the Weaviate documentation for a [full list of LLMs avialable](https://weaviate.io/developers/weaviate/model-providers) for integration with Weaviate. 
+the Weaviate documentation for a [full list of LLMs available](https://weaviate.io/developers/weaviate/model-providers) for integration with Weaviate. 
 Alternatively, users may also configure their own vector models. 
 
 NOTE: This is bare bones, and has not been fine tuned for accuracy purposes. Users should expect
@@ -39,13 +39,13 @@ NOTE: This is a bare bones infrastructure, and will evolve over time.
     │  ├─ simple_query.py               # example queries & generative responses from docs in the db
     ├─ .gitignore                       # standard Python gitignore
     ├─ docker-compose.yml               # Docker Compose to deploy Weaviate locally
-    ├─ README.md                        # outline of what is contianed in the repo and how to use it
+    ├─ README.md                        # outline of what is contained in the repo and how to use it
     ├─ requirements.txt                 # libraries required to run the code in this repo
 
 
 # How to Use
 ## Install Requirements
-In your virtual environment, make sure you have then necessary libraries installe by running:
+In your virtual environment, make sure you have the necessary libraries installed by running:
 
 ```bash
 pip install -r requirements.txt
@@ -59,7 +59,7 @@ this directory:
 docker-compose up -d
 ```
 
-This will createa a Wevaite database connection on your local machine. You can test that this 
+This will create a Weaviate database connection on your local machine. You can test that this 
 connection is working correctly by running the following command in a terminal from this repo:
 
 ```bash
@@ -80,7 +80,7 @@ Two text documents have been included in this repo in data/policy docs. One is t
 Compact, and the other is an imaginary water rights agreement. These documents will be queried and
 used as reference in the generative responses output when using the sample queries. 
 
-NOTE: These two documents should *already* be included in the data base. Before re-adding these 
+NOTE: These two documents should *already* be included in the database. Before re-adding these 
 documents, you can check this by running:
 
 ```bash
